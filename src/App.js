@@ -1,34 +1,41 @@
 import './App.css';
+import ShipDisplay from './components/ShipDisplay';
 import { useState, useEffect } from 'react'
 
-function App() {
-  
-  const [ships, setShips] = useState([])
 
+function App() {
+  // initializing state to an empty array
+  const [ships, setShips] = useState([])
+  // fetching data from the api
   const generateShips = async () => {
     const response = await fetch(`https://swapi.dev/api/starships/`)
 
     const data = await response.json()
-    console.log(data.results)
+    
+    //console.log(data.results)
+
     // sets state to hold ship data
-    setShips(data.results)
+    setShips(data)
   }
 
-  useEffect(() => {
-    generateShips()
-  },[])
- const allShips = ships.map((ship, idx) => {
-   return(
-    <div>
-      {ship.name}
-    </div>
-   )
- })
-  return (
-    <div className="App">
-      {allShips}
-    </div>
-  );
-}
+  useEffect(() => { generateShips() },[])
+  
+  const shipMap = ships?.results?.map((ship, index) => {
+    return (
+      <ShipDisplay name={ship.name} key={index} />
+    )
+    
+  })
+
+    return (
+      <div className='App'>
+
+        {shipMap}
+
+      </div>
+    )
+  }
+
+
 
 export default App;
